@@ -1,0 +1,100 @@
+<Module>
+  <ModulePrefs title="Google.com"/>
+  <Content type="html">
+    <![CDATA[
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/centerclassroom/ola@main/style.css"/>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      height: 100%;
+    }
+    canvas:focus { outline: none; }
+    #loading-cover {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: url('https://cdn.jsdelivr.net/gh/KrnlScriptMakerTryer/LOADING-SCREEN-IMG@main/IMG_20251026_152440.jpg') center / cover no-repeat;
+    }
+    #unity-progress-bar-empty {
+      width: 80%;
+      height: 20px;
+      background: rgba(255,255,255,0.3);
+      margin-top: 20px;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    #unity-progress-bar-full {
+      height: 100%;
+      width: 0%;
+      background: #4caf50;
+    }
+    .spinner {
+      margin-top: 20px;
+      border: 4px solid rgba(0,0,0,0.1);
+      border-left-color: #4caf50;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin { 100% { transform: rotate(360deg); } }
+  </style>
+</head>
+<body class="dark">
+  <div id="unity-container" class="unity-desktop">
+    <canvas id="unity-canvas" tabindex="-1"></canvas>
+  </div>
+  <div id="loading-cover">
+    <div id="unity-progress-bar-empty">
+      <div id="unity-progress-bar-full"></div>
+    </div>
+    <div class="spinner"></div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/gh/centerclassroom/ola@main/Build/Build.loader.js"></script>
+  <script>
+    const canvas = document.querySelector("#unity-canvas");
+    const loadingCover = document.querySelector("#loading-cover");
+    const progressBarFull = document.querySelector("#unity-progress-bar-full");
+
+    const config = {
+      dataUrl: "https://cdn.jsdelivr.net/gh/centerclassroom/ola@main/Build/Build.data.br",
+      frameworkUrl: "https://cdn.jsdelivr.net/gh/centerclassroom/ola@main/Build/Build.framework.js",
+      codeUrl: "https://cdn.jsdelivr.net/gh/centerclassroom/ola@main/Build/Build.wasm.br",
+      streamingAssetsUrl: "StreamingAssets",
+      companyName: "DefaultCompany",
+      productName: "99Days",
+      productVersion: "0.1"
+    };
+
+    createUnityInstance(canvas, config, (progress) => {
+      progressBarFull.style.width = `${100 * progress}%`;
+    }).then((unityInstance) => {
+      loadingCover.style.display = "none";
+    }).catch((err) => console.error("Unity load error:", err));
+
+    function FocusGame() {
+      window.focus();
+      canvas.focus();
+    }
+
+    window.addEventListener('pointerdown', FocusGame);
+    window.addEventListener('touchstart', FocusGame);
+    document.addEventListener('contextmenu', e => e.preventDefault());
+  </script>
+</body>
+</html>
+    ]]>
+  </Content>
+  </Module>
